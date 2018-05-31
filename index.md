@@ -1,3 +1,0 @@
-## Hi I'm Mahmoud Atwa.
-
-## I'm also still building this though...
