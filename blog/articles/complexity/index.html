@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="author" content="Mahmoud Atwa">
+    <meta name="keywords" content="Big-O-Notation Complexity Performance algorithm Complexity-analysis Mathematical-analysis Mathematics-behind-Big-O">
+    <meta name="theme-color" content="#ffa500" />
+    <meta name="description" content="A general approach for analyzing algorithms, 
+    with a discussion on Big O notation and the mathematics behind it.
+    Including some examples on both practical and theoritcal aspects of the concept 
+    & other related concepts that are minimally discussed.">
+    <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.ico">
+    <link rel="manifest" href="/js/manifest.json">
+
+    <title>Introduction to Complexity Analysis</title>
+    <style>
+        .personal-photo {
+            width: 30%;
+            height: 30vw;
+            max-width: 250px;
+            max-height: 250px;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css?family=Anonymous+Pro" rel="stylesheet">
+    <link rel="stylesheet" href="../../../css/styles.css">
+    <link rel="stylesheet" href="../../css/article.css">
+</head>
+
+<body>
+
+    <header>
+        <img tabindex="0" class="personal-photo loading" src="../../../img/loading.jpg" data-src="../../../img/personal_image.jpg"
+            alt="A pticture of Mahmoud Atwa">
+
+        <h1 tabindex="0" class="menu-title">
+            Complexity Analysis
+        </h1>
+
+        <nav>
+            <ul class="header-list">
+
+                <li class="list-item">
+                    <a class="link" href="../../../">
+                        <span class="text">Home</span>
+                    </a>
+                </li>
+                <li class="list-item">
+                    <a class="link" href="../../../projects.html">
+                        <span class="text">Projects</span>
+                    </a>
+                </li>
+                <li class="list-item">
+                    <a class="link" href="../../">
+                        <span class="text">Blog</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+    </header>
+
+    <main>
+
+        <nav>
+            <ul class="main-list">
+                <li class="list-item">
+                    <a class="link" href="../../../">
+                        <span class="text">Home</span>
+                    </a>
+                </li>
+                <li class="list-item">
+                    <a class="link" href="../../../projects.html">
+                        <span class="text">Projects</span>
+                    </a>
+                </li>
+                <li class="list-item">
+                    <a class="link" href="../../">
+                        <span class="text">Blog</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <article>
+            <section>
+                <h2 tabindex="0">Preface</h2>
+                <p tabindex="0" class="paragraph">
+                    Before we get started, we need to know the difference between Performance & Complexity and why we focus on complexity rather
+                    than performance in most of the time.
+                </p>
+                <p tabindex="0" class="paragraph">
+
+                    In short, Performance is a measure of how resources are being used when a program is run. While, Complexity is a measure
+                    of how such resources scale. (i.e. What happens when the problem being solved gets bigger? ) Whilst,
+                    Performance relies on the testing machine while complexity relies on the algorithm itself. It’s also
+                    notable that complexity affects performance not the other way around.
+                </p>
+                <p tabindex="0" class="paragraph">
+                    In addition to that, Complexity describes how efficient our algorithm to a specific problem is. It is also important to note
+                    that efficiency covers more than just the CPU (time) needed. It also covers memory usage, disk usage
+                    & network usage. But we’ll just focus on the CPU resources.
+                </p>
+            </section>
+            <section>
+                <h2 tabindex="0">Big O Notation</h2>
+                <p tabindex="0" class="paragraph">
+                    Complexity is often emphasized by the Big O Notation, which is sometimes called Landau’s Symbol, after its inventor; the
+                    German mathematician Edmund Landau. The letter O is also used since the rate of growth of a function
+                    is also called the Order of such function.
+                </p>
+                <h3 tabindex="0" class="subtitle">Determining Complexity of an algorithm</h3>
+                <p class="paragraph">
+                    <span tabindex="0">Here's the important rule</span>
+                    <br>
+                    <span aria-label="processing time is directly proportional with the number of basic operations" class="rule" tabindex="0">Processing time ∝ Number of basic operations</span>
+                </p>
+                <p tabindex="0" class="paragraph">
+                    Thus, You just determine the number of basic operations that occur. However, there’s some other extra rules that you should
+                    follow.
+                </p>
+                <ul class="list">
+                    <li>
+                        <p tabindex="0" class="paragraph">
+                            Ignore constants, constants are usually affected by the machine itself. Thus, it’s considered as a part of performance not
+                            complexity.
+                        </p>
+                    </li>
+                    <li>
+                        <p tabindex="0" class="paragraph">
+                            We are usually interested in the worst case of the algorithm. Worst case refers to the case in which your algorithm runs
+                            the maximum number of operations needed to accomplish a certain task. Whereas Best case refers
+                            to the case in which your algorithm runs the minimum number of operations needed to accomplish
+                            such task.
+                        </p>
+                    </li>
+                </ul>
+                <p tabindex="0" class="paragraph">
+                    So, lets analyze some algorithms....
+                </p>
+                <code class="code" tabindex="0">
+                    for (int i = 0; i < n; i++) { <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;console.log(`I’ve said ‘Hello World’ for ${i} time(s)`);<br>
+                    }
+                </code>
+                <p tabindex="0" class="paragraph">
+                    The logging statement is considered a basic operation, thus the number of basic operations is ‘n’. So, complexity can be
+                    determined as O(n). Notice however, that this example doesn’t have a worst case nor a best case.
+                </p>
+                <p tabindex="0" class="paragraph">
+                    Here’s another similar example
+                </p>
+                <code class="code" tabindex="0">
+                    for (int i = 0; i < n; i+=2) { <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;console.log(`I’ve said ‘Hello World’ for ${i/2} time(s)`);<br>
+                    }
+                </code>
+                <p tabindex="0" class="paragraph">
+                    The logging statement will run n/2 times & Since we ignore constants, it will have the same complexity as the previous one.
+                    O(n).
+                </p>
+                <p tabindex="0" class="paragraph">
+                    Wanna see some logarithmic complexities?
+                </p>
+                <code class="code" tabindex="0">
+                    for (int i = 0; i < n; i*=2) { <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;console.log(`I’ve said ‘Hello World’ for ${Math.log2(i)} time(s)`);<br>
+                    }
+                </code>
+                <p tabindex="0" class="paragraph">
+                    Such snippet, runs log
+                    <sub>2</sub>(n) times. Thus, its complexity is O(log(n))
+                </p>
+                <p tabindex="0" class="paragraph">
+                    Notice that we didn’t include the base in the notation since we can convert between log. basis by dividing by a constant.
+                </p>
+                <p tabindex="0" class="paragraph">
+                    What about nested loops? You do the same, just figure out how many times does it run. And in many cases, you just multiply
+                    ‘n’ of the nested loop by the ‘n’ of the parent loop. And that’s when you get quadratic, cubic, and other
+                    horrible nightmares...
+                </p>
+                <p tabindex="0" class="paragraph">
+                    Here’s a graph that demonstrates different complexities,
+                    <b>Lower is better</b>.
+                </p>
+                <figure>
+                    <img tabindex="0" src="../../../img/loading.jpg" class="demonstration-image loading" data-src="./assets/graphComparison.png"
+                        alt="A graphical representation of the growth of different functions">
+                    <figcaption>
+                        <p class="caption-paragraph">
+                            A graphical representation of the growth of different functions.
+                            <br>
+                            <a class="credit-link" href="https://www.hackerearth.com/practice/notes/big-o-cheatsheet-series-data-structures-and-algorithms-with-thier-complexities-1/">
+                                Credits to Varun N R
+                            </a>
+                        </p>
+                    </figcaption>
+                </figure>
+
+
+                <h3 tabindex="0" class="subtitle">The Mathematics behind it</h3>
+                <p tabindex="0" class="paragraph">
+                    The Big O Notation generally expresses the upper bound of a function. Meaning that it descripes a value that the function
+                    cannot exceed. For example, a function f(x) = 2. has an upper bound of 2. because, well; f(x) can never
+                    exceed the value of 2.
+                </p>
+                <p class="paragraph">
+                    <span tabindex="0">Here’s the formal definition</span>
+                    <br>
+                    <span class="rule" tabindex="0" aria-label="We say that a function f of x is equal to the big O of a function g of x, if and only if; there exists constants c & k, such that for every x more than or equal to k, the absolute value of the function f of x is less than or equal to the absolute value of the function g of x multiplied by c">
+                        We say that f(x) = Ο(g(x)). Iff, there exists constants ϲ & κ. Such that ∀ x ≥ κ, |f(x)| ≤ |ϲ.g(x)|
+                    </span>
+                </p>
+                <p tabindex="0" class="paragraph">
+                    Here’s a graphical representation of the definition
+                </p>
+
+                <figure>
+                    <img tabindex="0" src="../../../img/loading.jpg" class="demonstration-image loading" data-src="./assets/MathematicalGraph.gif"
+                        alt="A graphical representation of a function acting as an upper bound for another function">
+                    <figcaption>
+                        <p class="caption-paragraph">
+                            A graphical representation of a function acting as an upper bound for another function.
+                            <br>
+                            <a class="credit-link" href="https://xlinux.nist.gov/dads/HTML/bigOnotation.html">
+                                Credits to
+                                <b>Donald E. Knuth</b>, Big Omicron and Big Omega and Big Theta, SIGACT News, 8(2):18-24, April-June
+                                1976.
+                            </a>
+                        </p>
+                    </figcaption>
+                </figure>
+
+                <p class="paragraph">
+                    <span tabindex="0"> So, lets practice a little
+                    </span>
+                    <br>
+                    <span aria-label="Prove that the function f of x equal to x power 5 plus 9 x squared is big O of x power 5" class="rule"
+                        tabindex="0">Prove that the function f(x) = x
+                        <sup>5</sup> + 9x
+                        <sup>2</sup> is Ο(x
+                        <sup>5</sup>)</span>
+                </p>
+                <p class="paragraph rule">
+                    <span tabindex="0" aria-label="Since x power 5 plus 9 x squared is less than or equal c multiplied by x power 5 ">
+                        ∵ x
+                        <sup>5</sup> + 9x
+                        <sup>2</sup>
+                        ≤ ϲ.x
+                        <sup>5</sup>
+                    </span>
+                    <br>
+                    <br>
+                    <span aria-label="let k be equal to 1" tabindex="0">
+                        Let κ = 1
+                    </span>
+                    <br>
+                    <br>
+                    <span aria-label="Then, c is more than or equal to 10" tabindex="0">
+                        ∴ 10 ≤ ϲ
+                    </span>
+                    <br>
+                    <br>
+                    <span aria-label="Then, k & c exists" tabindex="0">
+                        ∴ κ & ϲ exists
+                    </span>
+                    <br>
+                    <br>
+                    <span aria-label="Then, the function f of x is equal to the big O of x power 5" tabindex="0">
+                        ∴ f(x) = Ο(x
+                        <sup>5</sup>)
+                    </span>
+                </p>
+                <h3 tabindex="0" class="subtitle">Here's some common useful Identities</h3>
+                <ul class="list">
+                    <li>
+                        <p tabindex="0" aria-label="A polynomial f of x is equal to the big o of x power n, where n is the degree of such function"
+                            class="paragraph rule">
+                            Given a polynomial f(x) = a
+                            <sub>n</sub> x
+                            <sup>n</sup> + ...... f(x) = O(x
+                            <sup>n</sup>)
+                        </p>
+                    </li>
+                    <li>
+                        <p aria-label="n factorial is equal to the big oh of n power n" tabindex="0" class="paragraph rule">
+                            n! = O(n
+                            <sup>n</sup>)
+                        </p>
+                    </li>
+                    <li>
+                        <p aria-label="the log of n factorial is equal to the big O of n multiplied by log n" tabindex="0" class="paragraph rule">
+                            log(n!) = O(n.logn)
+                        </p>
+                    </li>
+                </ul>
+                <h3 tabindex="0" class="subtitle">Other notations’ examples</h3>
+                <ul class="list">
+                    <li>
+                        <p tabindex="0" class="paragraph">
+                            Big Omega (Ω), A complementary of Big O, as it describes the lower bound of a function.
+                        </p>
+                    </li>
+                    <li>
+                        <p tabindex="0" class="paragraph">
+                            Big Theta (Θ) Describes both the lower and upper bounds of a function.
+                        </p>
+                    </li>
+                </ul>
+            </section>
+            <section>
+                <h2 tabindex="0">References</h2>
+                <ul class="list">
+                    <li>
+                        <p tabindex="0" class="paragraph caption-paragraph">
+                            <a class="credit-link" target="_blank" href="http://web.mit.edu/16.070/www/lecture/big_o.pdf">MIT Lecture notes</a>
+                        </p>
+                    </li>
+                </ul>
+            </section>
+        </article>
+
+
+    </main>
+
+    <footer class="footer">
+        <section class="link-form-container">
+            <div class="social">
+                <address tabindex="0" class="info">
+                    <p class="info-p">Mahmoud Atwa</p>
+                    <p class="info-p">Junior Web Developer</p>
+                    <p class="info-p">Cairo, Egypt</p>
+                </address>
+                <span>
+                    <a class="social-link" target="_blank" href="https://www.github.com/atwamahmoud">
+                        <img src="../../../img/loading.jpg" alt="Visit me on github" class="icon loading" data-src="../../../img/github.png">
+                    </a>
+                </span>
+                <span>
+                    <a class="social-link" target="_blank" href="https://twitter.com/m__atwaa">
+                        <img src="../../../img/loading.jpg" alt="Visit me on twitter" class="icon loading" data-src="../../../img/twitter.svg">
+                    </a>
+                </span>
+
+                <span>
+                    <a class="social-link" target="_blank" href="https://www.linkedin.com/in/3atwaa">
+                        <img src="../../../img/loading.jpg" alt="Visit me on linkedIn" class="icon loading" data-src="../../../img/linked.png">
+                    </a>
+                </span>
+
+            </div>
+
+            <form tabindex="0" aria-label="Contact me" action="https://personal-app-5239.herokuapp.com/verify" method="POST">
+                <span class="input-container">
+                    <input class="input-box" aria-label="Please, Enter your full name" type="text" name="name" id="name" placeholder="Full Name.">
+                </span>
+                <span class="input-container">
+                    <input class="input-box" type="email" aria-label="Please, Enter your e-mail address" id="email" name="email" placeholder="E-mail address.">
+                </span>
+                <span class="input-container">
+                    <textarea aria-label="Your message" class="input-box msg" aria-label="Please, Enter your Message" name="msg" placeholder="Your message."></textarea>
+                </span>
+                <span class="input-container">
+                    <script src='https://www.google.com/recaptcha/api.js'></script>
+                    <div class="g-recaptcha" data-sitekey="6LepP2AUAAAAAPGFKcCTfJ0uZC2Yc16OJbTG9xG6"></div>
+                </span>
+                <button class="submit-btn input-box" type="submit">
+                    <span>Send</span>
+                    <svg class="send-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path id="path" d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+                    </svg>
+                </button>
+            </form>
+
+
+        </section>
+
+        <section class="legal">
+            <p tabindex="0">
+                COPYRIGHT (C) 2017
+                <a class="legal-link" href="/">MAHMOUD ATWA</a> ALL RIGHTS RESERVED.
+            </p>
+        </section>
+
+    </footer>
+
+
+
+    <script src="https://polyfill.io/v2/polyfill.min.js?features=IntersectionObserver"></script>
+    <script src="../../../js/main.js"></script>
+</body>
+
+</html>
