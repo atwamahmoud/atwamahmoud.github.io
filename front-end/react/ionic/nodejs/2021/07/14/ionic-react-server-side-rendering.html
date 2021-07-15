@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>Ionic SSR with React: An adventure | Mahmoud Atwa</title>
+<meta name="generator" content="Jekyll v4.2.0" />
+<meta property="og:title" content="Ionic SSR with React: An adventure" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Why" />
+<meta property="og:description" content="Why" />
+<link rel="canonical" href="https://atwa.me/front-end/react/ionic/nodejs/2021/07/14/ionic-react-server-side-rendering.html" />
+<meta property="og:url" content="https://atwa.me/front-end/react/ionic/nodejs/2021/07/14/ionic-react-server-side-rendering.html" />
+<meta property="og:site_name" content="Mahmoud Atwa" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2021-07-14T00:56:00+02:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Ionic SSR with React: An adventure" />
+<script type="application/ld+json">
+{"headline":"Ionic SSR with React: An adventure","dateModified":"2021-07-14T00:56:00+02:00","datePublished":"2021-07-14T00:56:00+02:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://atwa.me/front-end/react/ionic/nodejs/2021/07/14/ionic-react-server-side-rendering.html"},"url":"https://atwa.me/front-end/react/ionic/nodejs/2021/07/14/ionic-react-server-side-rendering.html","@type":"BlogPosting","description":"Why","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="https://atwa.me/feed.xml" title="Mahmoud Atwa" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Mahmoud Atwa</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Ionic SSR with React: An adventure</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2021-07-14T00:56:00+02:00" itemprop="datePublished">Jul 14, 2021
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <h2 id="why">Why</h2>
+
+<p>React is a great library for UI and makes it easier to build UIs and greatly reduces the development time. Ionic is also a great library for developing cross-platform hybrid apps. Ionic can be easily integrated with React.
+React is an official flavor of Ionic.</p>
+
+<h3 id="its-not-all-flowers-and-roses">It’s not all flowers and roses.</h3>
+
+<p>But there’s a catch; React is a JS library, where you write your UI in JS. Which means that HTML is generated on the browser. This leads to a less than ideal experience for crawlers that index your website.</p>
+
+<h2 id="the-adventures">The Adventures</h2>
+
+<h3 id="approach-1-using-reactdomserver-in-a-nodejs-environment">Approach 1: using ReactDOMServer in a nodejs environment</h3>
+
+<p>A standard way to enable SSR for a React.js app is to just use ReactDOMServer on the server and replace the <code class="language-plaintext highlighter-rouge">render()</code> method with <code class="language-plaintext highlighter-rouge">hydrate()</code> in the client so that the application will not re-render (the already rendered components) when it is served to the browser.</p>
+
+<p>But there’s a problem, <code class="language-plaintext highlighter-rouge">Ionic</code> components use <code class="language-plaintext highlighter-rouge">stencil.js</code> which uses web components which is not supported by <code class="language-plaintext highlighter-rouge">ReactDOMServer</code>. So we need another solution.</p>
+
+<h4 id="example-snippet">Example Snippet:</h4>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nx">express</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">express</span><span class="dl">"</span><span class="p">;</span>
+<span class="k">import</span> <span class="nx">ReactDOMServer</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">react-dom/server</span><span class="dl">"</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">App</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">./App</span><span class="dl">"</span><span class="p">;</span>
+
+<span class="kd">const</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">express</span><span class="p">();</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">express</span><span class="p">.</span><span class="kd">static</span><span class="p">(</span><span class="nx">STATIC_ASSETS_DIR</span><span class="p">));</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="dl">"</span><span class="s2">*</span><span class="dl">"</span><span class="p">,</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">appHtml</span> <span class="o">=</span> <span class="nx">ReactDOMServer</span><span class="p">.</span><span class="nx">renderToString</span><span class="p">(</span><span class="o">&lt;</span><span class="nx">App</span> <span class="o">/&gt;</span><span class="p">);</span>
+  <span class="c1">// Assume that we have an html template</span>
+  <span class="kd">const</span> <span class="nx">html</span> <span class="o">=</span> <span class="nx">htmlTemplate</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="dl">"</span><span class="s2">^_^__APP_SHOULD_BE_HERE__^_^</span><span class="dl">"</span><span class="p">,</span> <span class="nx">appHtml</span><span class="p">);</span>
+  <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">html</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<h3 id="approach-2-using-nextjs">Approach 2: using <a href="https://nextjs.org">Next.js</a></h3>
+
+<p>In most cases, this approach will work. It works like this:</p>
+
+<ol>
+  <li>Instead of using <code class="language-plaintext highlighter-rouge">@ionic/react</code>, use <code class="language-plaintext highlighter-rouge">@ionic/core</code></li>
+  <li>Instead of using React components (e.g. <code class="language-plaintext highlighter-rouge">&lt;IonHeader /&gt;</code>) use web components (e.g. <code class="language-plaintext highlighter-rouge">&lt;ion-header /&gt;</code>)</li>
+  <li>Initialize web components by calling <code class="language-plaintext highlighter-rouge">defineCustomeElements</code></li>
+</ol>
+
+<p>And that’s it (assuming you’ve configured your project to use Next.js). For a starter repo, check this repo <a href="https://github.com/adaept/moonbase-vercel-ionic">moonbase-vercel-ionic</a>.</p>
+
+<p>But for <a href="https://oppa.app">Oppa</a>’s use case there’s another catch, Some of the components we use are not supported in <code class="language-plaintext highlighter-rouge">@ionic/core</code>.</p>
+
+<h3 id="approach-3-bringing-a-gun-to-a-knife-fight">Approach 3: Bringing a gun to a knife fight</h3>
+
+<p>The last approach which will work with anything is to use a browser. A browser supports web components, is not limited to a certain library (e.g. react, angular, or vue). So, I used <a href="https://github.com/puppeteer/puppeteer">puppeteer</a> which is a library that provides a Node.js API to control chromium &amp; firefox.</p>
+
+<p>So our final workflow is as follows:</p>
+
+<ol>
+  <li>The client sends a GET request to the server</li>
+  <li>The server checks if the needed resource is a page or just a static asset.</li>
+  <li>If it’s a static asset serve it with express and let Nginx add cache headers along with compressing the file.</li>
+  <li>Otherwise, check if the page is already rendered and in the cache.</li>
+  <li>If it’s in the cache serve it as a normal static asset.</li>
+  <li>Otherwise, run Puppeteer load the page URI.</li>
+  <li>Wait for the page to be loaded.</li>
+  <li>Grap the page’s HTML from Puppeteer and save it in the cache.</li>
+  <li>Send the HTML.</li>
+</ol>
+
+<p>This can be written in Node.js as the following</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">express</span><span class="p">();</span>
+
+<span class="c1">// Static files handler</span>
+<span class="nx">app</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="dl">"</span><span class="s2">*.*</span><span class="dl">"</span><span class="p">,</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">res</span><span class="p">.</span><span class="nx">sendFile</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">url</span><span class="p">));</span>
+
+<span class="c1">// Dynamic Page handler</span>
+<span class="nx">app</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="dl">"</span><span class="s2">*</span><span class="dl">"</span><span class="p">,</span> <span class="k">async</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">cache</span><span class="p">.</span><span class="nx">has</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">url</span><span class="p">))</span> <span class="p">{</span>
+    <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">cache</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">url</span><span class="p">));</span>
+    <span class="k">return</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="kd">const</span> <span class="nx">browser</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">puppeteer</span><span class="p">.</span><span class="nx">launch</span><span class="p">();</span>
+  <span class="kd">const</span> <span class="nx">page</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">browser</span><span class="p">.</span><span class="nx">newPage</span><span class="p">();</span>
+  <span class="k">await</span> <span class="nx">page</span><span class="p">.</span><span class="nx">goto</span><span class="p">(</span><span class="s2">`http://localhost:</span><span class="p">${</span><span class="nx">CLIENT_PORT</span><span class="p">}</span><span class="s2">`</span><span class="p">,</span> <span class="p">{</span> <span class="na">waitUntil</span><span class="p">:</span> <span class="dl">"</span><span class="s2">networkidle0</span><span class="dl">"</span> <span class="p">});</span>
+  <span class="kd">const</span> <span class="nx">html</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">page</span><span class="p">.</span><span class="nx">content</span><span class="p">();</span>
+  <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">html</span><span class="p">);</span>
+  <span class="nx">cache</span><span class="p">.</span><span class="nx">put</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">url</span><span class="p">,</span> <span class="nx">html</span><span class="p">);</span>
+  <span class="k">await</span> <span class="nx">browser</span><span class="p">.</span><span class="nx">close</span><span class="p">();</span>
+<span class="p">});</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="nx">SERVER_PORT</span><span class="p">);</span>
+
+<span class="c1">// React Server</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">express</span><span class="p">.</span><span class="kd">static</span><span class="p">(</span><span class="nx">STATIC_ASSETS_DIR</span><span class="p">));</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="dl">"</span><span class="s2">*</span><span class="dl">"</span><span class="p">,</span> <span class="p">(</span><span class="nx">_</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">res</span><span class="p">.</span><span class="nx">sendFile</span><span class="p">(</span><span class="dl">"</span><span class="s2">index.html</span><span class="dl">"</span><span class="p">));</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="nx">CLIENT_PORT</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>Note that we’ve used two servers in this example, one where the world sends requests to and handles cache as well as serving static assets while the other is for Puppeteer to connect to, to load the application.</p>
+
+<p>In the end, keep this in mind. Complexity must be justified!</p>
+
+  </div><a class="u-url" href="/front-end/react/ionic/nodejs/2021/07/14/ionic-react-server-side-rendering.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+    <h2 class="footer-heading">Mahmoud Atwa</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-3">
+        <ul class="social-media-list">
+          <li>
+            <a href="https://github.com/atwamahmoud">
+              <svg class="svg-icon">
+                <use xlink:href="/assets/minima-social-icons.svg#github"></use>
+              </svg>
+              <span class="username">atwamahmoud</span>
+            </a>
+          </li>
+          <li>
+            <a class="last-child" href="https://www.twitter.com/m__atwa">
+              <svg class="svg-icon">
+                <use xlink:href="/assets/minima-social-icons.svg#twitter"></use>
+              </svg>
+              <span class="username">m__atwa</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-3">
+        <p>
+          A software engineering focused blog. You'll find some useful posts
+          &amp; some not so useful.
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+
+</html>
